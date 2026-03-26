@@ -36,7 +36,7 @@ app.use((req, res) => {
 const connectedPlayers = new Map();
 
 io.on("connection", (socket) => {
-  console.log(`✅ Player connected: ${socket.id}`);
+
 
   socket.on("player:join", (data) => {
     const player = {
@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
     socket.emit("players:list", otherPlayers);
     socket.broadcast.emit("player:joined", player);
 
-    console.log(`👤 ${player.name} joined! Total: ${connectedPlayers.size}`);
+
   });
 
   socket.on("player:location", (data) => {
@@ -104,7 +104,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const player = connectedPlayers.get(socket.id);
     if (player) {
-      console.log(`❌ ${player.name} disconnected`);
+
       connectedPlayers.delete(socket.id);
       socket.broadcast.emit("player:left", { id: socket.id });
     }
@@ -118,11 +118,11 @@ setInterval(() => {
     if (now - player.lastSeen > 60000) {
       connectedPlayers.delete(id);
       io.emit("player:left", { id });
-      console.log(`🧹 Cleaned up: ${player.name}`);
+
     }
   }
 }, 30000);
 
-httpServer.listen(port, () => {
-  console.log(`🚀 Server + Socket.io running on http://localhost:${port}`);
+httpServer.listen(port, '0.0.0.0', () => {
+
 });

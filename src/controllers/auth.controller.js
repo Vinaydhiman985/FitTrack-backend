@@ -34,9 +34,7 @@ export const register = async (req, res) => {
     });
 
     // Send verification email (non-blocking)
-    sendVerificationEmail(email, name, verificationCode).catch(err =>
-      console.log('Email send error:', err.message)
-    );
+    sendVerificationEmail(email, name, verificationCode).catch(err => {});
 
     res.status(201).json({
       message: 'Registration successful! Check your email for verification code.',
@@ -77,9 +75,7 @@ export const verifyEmail = async (req, res) => {
     await user.save();
 
     // Send welcome email
-    sendWelcomeEmail(user.email, user.name).catch(err =>
-      console.log('Welcome email error:', err.message)
-    );
+    sendWelcomeEmail(user.email, user.name).catch(err => {});
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
 
@@ -114,9 +110,7 @@ export const resendCode = async (req, res) => {
     user.verificationExpiry = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
 
-    sendVerificationEmail(user.email, user.name, verificationCode).catch(err =>
-      console.log('Email send error:', err.message)
-    );
+    sendVerificationEmail(user.email, user.name, verificationCode).catch(err => {});
 
     res.status(200).json({ message: 'Verification code resent!' });
   } catch (error) {
